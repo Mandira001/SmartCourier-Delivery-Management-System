@@ -1,0 +1,5 @@
+package com.lpu.delivery_service.entity;
+
+public class Delivery {
+
+}

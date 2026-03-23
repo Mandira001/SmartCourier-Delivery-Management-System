@@ -1,0 +1,5 @@
+package com.lpu.delivery_service.dto;
+
+public class DeliveryRequest {
+
+}

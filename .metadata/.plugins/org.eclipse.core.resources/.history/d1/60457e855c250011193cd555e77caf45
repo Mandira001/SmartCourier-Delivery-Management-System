@@ -1,0 +1,5 @@
+package com.lpu.auth_service.repository;
+
+public interface UserRepository {
+
+}

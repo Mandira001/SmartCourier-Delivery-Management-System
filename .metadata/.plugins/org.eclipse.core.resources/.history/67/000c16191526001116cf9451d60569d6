@@ -1,0 +1,11 @@
+spring.application.name=api-gateway
+server.port=8080
+
+# Eureka connection
+eureka.client.serviceUrl.defaultZone=http://localhost:8761/eureka/
+
+# Static test route
+spring.cloud.gateway.routes[0].id=test-route
+spring.cloud.gateway.routes[0].uri=http://httpbin.org
+spring.cloud.gateway.routes[0].predicates[0]=Path=/test/**
+spring.cloud.gateway.routes[0].filters[0]=RewritePath=/test/(?<segment>.*), /${segment}
