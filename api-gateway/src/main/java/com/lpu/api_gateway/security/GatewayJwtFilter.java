@@ -9,6 +9,8 @@ import org.springframework.web.server.ServerWebExchange;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import reactor.core.publisher.Mono;
 
+import org.springframework.http.HttpStatus;
+
 @Component
 public class GatewayJwtFilter implements GlobalFilter, Ordered {
 
@@ -20,27 +22,45 @@ public class GatewayJwtFilter implements GlobalFilter, Ordered {
 
         String path = exchange.getRequest().getURI().getPath();
 
-        // 🔥 Skip auth endpoints
-        if (path.startsWith("/auth")) {
+        // 1. Public APIs (skip authentication)
+        if (path.startsWith("/gateway/auth")) {
             return chain.filter(exchange);
         }
 
-        String authHeader = exchange.getRequest().getHeaders().getFirst("Authorization");
+        // 2. Get Authorization header
+        String authHeader = exchange.getRequest()
+                .getHeaders()
+                .getFirst("Authorization");
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            exchange.getResponse().setStatusCode(org.springframework.http.HttpStatus.UNAUTHORIZED);
+            exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
             return exchange.getResponse().setComplete();
         }
 
         String token = authHeader.substring(7);
 
         try {
-            jwtUtil.extractEmail(token);
+            //Validate token
+            String email = jwtUtil.extractEmail(token);
+            String role = jwtUtil.extractRole(token);
+
+            System.out.println("User: " + email + " | Role: " + role);
+
+            //Role-based restriction (ADMIN only for update)
+            if (path.startsWith("/gateway/deliveries")
+                    && exchange.getRequest().getMethod().name().equalsIgnoreCase("PUT")
+                    && !"ADMIN".equals(role)) {
+
+                exchange.getResponse().setStatusCode(HttpStatus.FORBIDDEN);
+                return exchange.getResponse().setComplete();
+            }
+
         } catch (Exception e) {
-            exchange.getResponse().setStatusCode(org.springframework.http.HttpStatus.UNAUTHORIZED);
+            exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
             return exchange.getResponse().setComplete();
         }
 
+        //Continue request
         return chain.filter(exchange);
     }
 
@@ -49,3 +69,4 @@ public class GatewayJwtFilter implements GlobalFilter, Ordered {
         return -1;
     }
 }
+

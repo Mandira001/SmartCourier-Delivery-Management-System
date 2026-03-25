@@ -1,5 +1,0 @@
-package com.lpu.delivery_service.repository;
-
-public interface DeliveryRepository {
-
-}
