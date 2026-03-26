@@ -25,6 +25,10 @@ public class GatewayJwtFilter implements GlobalFilter, Ordered {
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
 
         String path = exchange.getRequest().getURI().getPath();
+        
+        if (path.contains("/v3/api-docs") || path.contains("/swagger-ui")) {
+            return chain.filter(exchange);
+        }
 
         // Public APIs
         if (path.startsWith("/gateway/auth")) {

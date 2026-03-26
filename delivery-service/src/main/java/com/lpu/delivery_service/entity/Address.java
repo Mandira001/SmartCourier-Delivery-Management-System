@@ -1,6 +1,7 @@
 package com.lpu.delivery_service.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 public class Address {
@@ -8,13 +9,16 @@ public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private String name;      // Person name (sender/receiver)
+    @NotBlank(message = "Name is required")
+    private String name; // Person name (sender/receiver)
+    @NotBlank(message = "Phone is required")
     private String phone;
 
     private String street;
+    @NotBlank(message = "City is required")
     private String city;
     private String state;
+    @NotBlank(message = "Pincode is required")
     private String pincode;
     private String country;
 

@@ -12,6 +12,8 @@ import com.lpu.delivery_service.entity.Delivery;
 import com.lpu.delivery_service.entity.DeliveryStatus;
 import com.lpu.delivery_service.service.DeliveryService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/deliveries")
 public class DeliveryController {
@@ -23,7 +25,7 @@ public class DeliveryController {
     @PreAuthorize("hasRole('USER')")
     @PostMapping
     public DeliveryResponse create(
-            @RequestBody CreateDeliveryRequest request,
+            @Valid @RequestBody CreateDeliveryRequest request,
             @RequestHeader("X-User-Email") String email) {
 
         return deliveryService.createDelivery(request, email);
@@ -55,7 +57,7 @@ public class DeliveryController {
         return deliveryService.updateStatus(id, status);
     }
     
-    @PreAuthorize("hasRole('USER','ADMIN')")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @GetMapping
     public List<Delivery> getAllDeliveries(){
     	return deliveryService.getAllDeliveries();

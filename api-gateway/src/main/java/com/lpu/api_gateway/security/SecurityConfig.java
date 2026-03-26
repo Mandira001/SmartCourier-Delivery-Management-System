@@ -11,7 +11,7 @@ public class SecurityConfig {
 	 public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
 		 return http
 	             .csrf(csrf -> csrf.disable())
-	             .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)   // 🔥 ADD THIS
+	             .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable) 
 	             .formLogin(ServerHttpSecurity.FormLoginSpec::disable) 
 	             .authorizeExchange(exchange -> exchange
 	                    .anyExchange().permitAll()
