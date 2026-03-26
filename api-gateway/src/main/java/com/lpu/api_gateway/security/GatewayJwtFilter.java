@@ -1,5 +1,7 @@
 package com.lpu.api_gateway.security;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
@@ -17,17 +19,18 @@ public class GatewayJwtFilter implements GlobalFilter, Ordered {
     @Autowired
     private JwtUtil jwtUtil;
 
+    private static final Logger log = LoggerFactory.getLogger(GatewayJwtFilter.class);
+
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
 
         String path = exchange.getRequest().getURI().getPath();
 
-        // 1. Public APIs (skip authentication)
+        // Public APIs
         if (path.startsWith("/gateway/auth")) {
             return chain.filter(exchange);
         }
 
-        // 2. Get Authorization header
         String authHeader = exchange.getRequest()
                 .getHeaders()
                 .getFirst("Authorization");
@@ -40,27 +43,25 @@ public class GatewayJwtFilter implements GlobalFilter, Ordered {
         String token = authHeader.substring(7);
 
         try {
-            //Validate token
             String email = jwtUtil.extractEmail(token);
             String role = jwtUtil.extractRole(token);
 
-            System.out.println("User: " + email + " | Role: " + role);
+            log.info("User: {} | Role: {}", email, role);
 
-            //Role-based restriction (ADMIN only for update)
-            if (path.startsWith("/gateway/deliveries")
-                    && exchange.getRequest().getMethod().name().equalsIgnoreCase("PUT")
-                    && !"ADMIN".equals(role)) {
-
-                exchange.getResponse().setStatusCode(HttpStatus.FORBIDDEN);
-                return exchange.getResponse().setComplete();
-            }
+            // PASS DATA TO SERVICES
+            exchange = exchange.mutate()
+                    .request(r -> r.headers(headers -> {
+                        headers.add("X-User-Email", email);
+                        headers.add("X-User-Role", role);
+                    }))
+                    .build();
 
         } catch (Exception e) {
+            e.printStackTrace();
             exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
             return exchange.getResponse().setComplete();
         }
 
-        //Continue request
         return chain.filter(exchange);
     }
 
@@ -69,4 +70,3 @@ public class GatewayJwtFilter implements GlobalFilter, Ordered {
         return -1;
     }
 }
-

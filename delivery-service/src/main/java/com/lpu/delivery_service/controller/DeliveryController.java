@@ -3,6 +3,7 @@ package com.lpu.delivery_service.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.lpu.delivery_service.dto.CreateDeliveryRequest;
@@ -19,6 +20,7 @@ public class DeliveryController {
     private DeliveryService deliveryService;
 
     // Create
+    @PreAuthorize("hasRole('USER')")
     @PostMapping
     public DeliveryResponse create(
             @RequestBody CreateDeliveryRequest request,
@@ -28,6 +30,7 @@ public class DeliveryController {
     }
 
     // My Deliveries
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/my")
     public List<Delivery> myDeliveries(
             @RequestHeader("X-User-Email") String email) {
@@ -36,12 +39,14 @@ public class DeliveryController {
     }
 
     // Get by ID
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/{id}")
     public Delivery getById(@PathVariable Long id) {
         return deliveryService.getById(id);
     }
 
     // Update Status
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public Delivery updateStatus(
             @PathVariable Long id,
@@ -50,6 +55,7 @@ public class DeliveryController {
         return deliveryService.updateStatus(id, status);
     }
     
+    @PreAuthorize("hasRole('USER','ADMIN')")
     @GetMapping
     public List<Delivery> getAllDeliveries(){
     	return deliveryService.getAllDeliveries();

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,18 +24,21 @@ public class TrackingController {
     private TrackingService trackingService;
 
     // Add Event
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/events")
     public String addEvent(@RequestBody TrackingEventRequest request) {
         return trackingService.addTrackingEvent(request);
     }
 
     // Get Tracking History
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @GetMapping("/{trackingNumber}")
     public List<TrackingResponse> getTracking(@PathVariable String trackingNumber) {
         return trackingService.getTrackingHistory(trackingNumber);
     }
 
     // Upload Document
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("/documents/upload")
     public String uploadDocument(
             @RequestParam String trackingNumber,
@@ -44,12 +48,14 @@ public class TrackingController {
     }
     
     //get document
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @GetMapping("/documents/{trackingNumber}")
     public List<Document> getDocuments(@PathVariable String trackingNumber) {
         return trackingService.getDocuments(trackingNumber);
     }
     
     //download document
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @GetMapping("/documents/download/{id}")
     public ResponseEntity<Resource> downloadFile(@PathVariable Long id) {
 
@@ -66,12 +72,14 @@ public class TrackingController {
     }
 
     // Save Proof
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("/proof")
     public String saveProof(@RequestBody DeliveryProof proof) {
         return trackingService.saveProof(proof);
     }
 
     // Get Proof
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @GetMapping("/{trackingNumber}/proof")
     public DeliveryProof getProof(@PathVariable String trackingNumber) {
         return trackingService.getProof(trackingNumber);

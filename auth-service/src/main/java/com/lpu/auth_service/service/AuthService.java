@@ -34,7 +34,19 @@ public class AuthService {
 		user.setName(request.getName());
 		user.setEmail(request.getEmail());
 		user.setPassword(passwordEncoder.encode(request.getPassword()));
-		user.setRole("USER");
+		// SAFE ROLE ASSIGNMENT
+        if ("ADMIN".equalsIgnoreCase(request.getRole())) {
+
+            // Check secret key
+            if ("SECRET123".equals(request.getAdminKey())) {
+                user.setRole("ADMIN");
+            } else {
+                throw new RuntimeException("Invalid admin key");
+            }
+
+        } else {
+            user.setRole("USER");
+        }
 		
 		userRepo.save(user);
 		

@@ -14,6 +14,7 @@ import com.lpu.auth_service.service.AuthService;
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
+	
 	@Autowired
 	private AuthService authService;
 	
