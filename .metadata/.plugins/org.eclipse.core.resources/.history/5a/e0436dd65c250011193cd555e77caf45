@@ -1,5 +1,0 @@
-package com.lpu.auth_service.dto;
-
-public class SignupRequest {
-
-}

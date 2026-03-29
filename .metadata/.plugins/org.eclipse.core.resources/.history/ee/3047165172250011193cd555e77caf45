@@ -1,5 +1,0 @@
-package com.lpu.auth_service.security;
-
-public class JwtFilter {
-
-}
