@@ -1,6 +1,7 @@
 package com.lpu.auth_service.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,9 @@ public class AuthService {
 	
 	@Autowired
 	private JwtUtil jwtUtil;
+	
+	@Autowired
+	private StringRedisTemplate redisTemplate;
 	
 	public String signup(SignupRequest request) {
 		
@@ -61,6 +65,14 @@ public class AuthService {
 			throw new RuntimeException("Invalid password");
 		}
 		
-		return jwtUtil.generateToken(user.getEmail(), user.getRole());
+		String token = jwtUtil.generateToken(user.getEmail(), user.getRole());
+
+        // STORE TOKEN IN REDIS
+        redisTemplate.opsForValue().set(
+        		user.getEmail(), 
+        		token, 
+        		java.time.Duration.ofHours(1));     //match JWT expiry
+		
+		return token;
 	}
 }

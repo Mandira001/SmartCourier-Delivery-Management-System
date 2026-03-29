@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.MessageBuilder;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,8 @@ import com.lpu.delivery_service.entity.Delivery;
 import com.lpu.delivery_service.entity.DeliveryStatus;
 import com.lpu.delivery_service.repository.DeliveryRepository;
 
+import io.micrometer.tracing.Tracer;
+
 @Service
 public class DeliveryService {
 
@@ -23,6 +27,9 @@ public class DeliveryService {
     
     @Autowired
     private RabbitTemplate rabbitTemplate;
+    
+    @Autowired
+    private Tracer tracer;
 
     // Create Delivery
     public DeliveryResponse createDelivery(CreateDeliveryRequest request, String email) {
@@ -70,10 +77,16 @@ public class DeliveryService {
         delivery.setStatus(newStatus);
         Delivery saved = deliveryRepo.save(delivery);
 
-        // SEND EVENT TO RABBITMQ
-        String message = saved.getTrackingNumber() + "|" + newStatus.name();
+        // 🔥 SEND EVENT TO RABBITMQ WITH TRACE
+        String payload = saved.getTrackingNumber() + "|" + newStatus.name();
 
-        rabbitTemplate.convertAndSend("tracking_queue", message);
+        Message msg = MessageBuilder
+                .withBody(payload.getBytes())
+                .setHeader("traceId", tracer.currentSpan().context().traceId())
+                .setHeader("spanId", tracer.currentSpan().context().spanId())
+                .build();
+
+        rabbitTemplate.send("tracking_queue", msg);
 
         return saved;
     }

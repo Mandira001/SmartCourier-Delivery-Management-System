@@ -10,6 +10,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
 
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.MessageProperties;
+
 class TrackingListenerTest {
 
     @InjectMocks
@@ -23,11 +26,16 @@ class TrackingListenerTest {
         MockitoAnnotations.openMocks(this);
     }
 
-    // ✅ Test message consumption
     @Test
     void testConsumeMessage() {
 
-        String message = "ABC123|IN_TRANSIT";
+        String payload = "ABC123|IN_TRANSIT";
+
+        MessageProperties props = new MessageProperties();
+        props.setHeader("traceId", "test-trace-id");
+        props.setHeader("spanId", "test-span-id");
+
+        Message message = new Message(payload.getBytes(), props);
 
         trackingListener.consume(message);
 
