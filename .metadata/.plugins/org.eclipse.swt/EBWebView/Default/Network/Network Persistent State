@@ -1,1 +1,1 @@
-{"net":{"http_server_properties":{"servers":[],"version":5},"network_qualities":{"CAISABiAgICA+P////8B":"3G","CAYSABiAgICA+P////8B":"Offline"}}}
+{"net":{"http_server_properties":{"servers":[{"anonymization":["KAAAACEAAABodHRwczovL3Jhdy5naXRodWJ1c2VyY29udGVudC5jb20AAAA=",false,0],"server":"https://raw.githubusercontent.com","supports_spdy":true}],"version":5},"network_qualities":{"CAASABiAgICA+P////8B":"4G","CAESABiAgICA+P////8B":"4G","CAISABiAgICA+P////8B":"3G","CAYSABiAgICA+P////8B":"Offline"}}}

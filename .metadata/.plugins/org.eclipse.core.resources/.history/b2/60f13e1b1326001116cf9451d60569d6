@@ -1,5 +1,0 @@
-package com.lpu.api_gateway.security;
-
-public class GatewayJwtFilter {
-
-}
