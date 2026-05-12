@@ -10,7 +10,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
-
+// Filter to extract user information from custom headers and set the authentication context 
+// for the request, allowing for role-based access control in the application.
 public class JwtHeaderFilter extends OncePerRequestFilter {
 
     @Override

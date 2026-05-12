@@ -17,6 +17,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+// SecurityConfig is a configuration class that defines the security settings for the Admin Service. 
+// It configures CORS to allow requests from any origin, disables CSRF protection (since this is a stateless API), 
+// and sets up a security filter chain that permits all requests (for simplicity) while adding a custom 
+// JWT header filter to extract user information from the Authorization header.
 @Configuration
 @EnableMethodSecurity
 public class SecurityConfig {

@@ -10,7 +10,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-
+// This filter intercepts incoming HTTP requests to validate the JWT token present in the Authorization header. 
+// It uses the JwtUtil to parse and validate the token. If the token is valid, it allows the request to proceed; 
+// otherwise, it responds with an unauthorized status.
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 

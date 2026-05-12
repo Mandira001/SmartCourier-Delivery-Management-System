@@ -1,5 +1,7 @@
 package com.lpu.auth_service.dto;
-
+// This class represents the data transfer object for a signup request. 
+// It contains fields for the user's name, email, password, role, and an optional admin key. 
+// This DTO is used to capture the data sent by the client when a user attempts to sign up.
 public class SignupRequest {
 
     private String name;

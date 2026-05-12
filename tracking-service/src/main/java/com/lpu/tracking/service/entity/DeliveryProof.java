@@ -2,7 +2,7 @@ package com.lpu.tracking.service.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-
+// Entity class for delivery proof, storing information about the delivery, receiver, and proof image path.
 @Entity
 public class DeliveryProof {
 

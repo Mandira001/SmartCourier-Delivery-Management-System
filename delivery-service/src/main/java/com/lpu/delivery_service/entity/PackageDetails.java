@@ -3,6 +3,7 @@ package com.lpu.delivery_service.entity;
 import jakarta.persistence.*;
 
 @Entity
+// PackageDetails stores information about the package being delivered, such as weight, type, and price. It is linked to a Delivery entity.
 public class PackageDetails {
 
     @Id

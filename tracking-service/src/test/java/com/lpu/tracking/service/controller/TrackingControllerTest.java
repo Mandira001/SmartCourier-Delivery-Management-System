@@ -20,7 +20,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 
-@WebMvcTest(TrackingController.class)
+@WebMvcTest(
+        controllers = TrackingController.class,
+        properties = {
+                "spring.cloud.config.enabled=false",
+                "spring.cloud.config.fail-fast=false",
+                "eureka.client.enabled=false"
+        }
+)
 @Import(SecurityConfig.class)
 class TrackingControllerTest {
 

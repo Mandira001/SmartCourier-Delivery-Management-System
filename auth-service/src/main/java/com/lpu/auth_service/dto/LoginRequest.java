@@ -1,5 +1,6 @@
 package com.lpu.auth_service.dto;
-
+// This class represents the data transfer object for a login request. 
+// It contains fields for the user's email and password.
 public class LoginRequest {
 	private String email;
 	private String password;

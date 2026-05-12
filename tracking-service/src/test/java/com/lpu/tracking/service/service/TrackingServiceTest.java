@@ -88,7 +88,7 @@ class TrackingServiceTest {
         DeliveryProof proof = new DeliveryProof();
         proof.setTrackingNumber("123");
 
-        when(proofRepo.findByTrackingNumber("123"))
+        when(proofRepo.findFirstByTrackingNumberOrderByDeliveredAtDesc("123"))
                 .thenReturn(java.util.Optional.of(proof));
 
         DeliveryProof result = trackingService.getProof("123");
@@ -100,7 +100,7 @@ class TrackingServiceTest {
     @Test
     void testGetProof_NotFound() {
 
-        when(proofRepo.findByTrackingNumber("123"))
+        when(proofRepo.findFirstByTrackingNumberOrderByDeliveredAtDesc("123"))
                 .thenReturn(java.util.Optional.empty());
 
         RuntimeException ex = assertThrows(RuntimeException.class, () -> {

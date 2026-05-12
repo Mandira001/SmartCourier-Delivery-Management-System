@@ -1,1 +1,4 @@
 /.metadata/
+**/target/
+frontend/dist/
+frontend/node_modules/

@@ -16,6 +16,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
 
+import io.micrometer.tracing.Span;
+import io.micrometer.tracing.TraceContext;
+import io.micrometer.tracing.Tracer;
+
 class DeliveryServiceTest {
 
     @InjectMocks
@@ -27,6 +31,15 @@ class DeliveryServiceTest {
     @Mock
     private org.springframework.amqp.rabbit.core.RabbitTemplate rabbitTemplate;
 
+    @Mock
+    private Tracer tracer;
+
+    @Mock
+    private Span span;
+
+    @Mock
+    private TraceContext traceContext;
+
     private Delivery delivery;
 
     @BeforeEach
@@ -36,6 +49,11 @@ class DeliveryServiceTest {
         delivery = new Delivery();
         delivery.setStatus(DeliveryStatus.BOOKED);
         delivery.setTrackingNumber("123");
+
+        when(tracer.currentSpan()).thenReturn(span);
+        when(span.context()).thenReturn(traceContext);
+        when(traceContext.traceId()).thenReturn("trace-123");
+        when(traceContext.spanId()).thenReturn("span-123");
     }
     
     @Test
@@ -109,7 +127,7 @@ class DeliveryServiceTest {
         assertEquals(DeliveryStatus.PICKED_UP, result.getStatus());
 
         verify(rabbitTemplate, times(1))
-                .convertAndSend(anyString(), anyString());
+                .send(eq("tracking_queue"), any(org.springframework.amqp.core.Message.class));
     }
 
     @Test

@@ -41,9 +41,9 @@ class AdminServiceTest {
 
         Map<String, Object> result = adminService.getDashboard();
 
-        assertEquals(2, result.get("totalDeliveries"));
-        assertEquals(1, result.get("delivered"));
-        assertEquals(1, result.get("inTransit"));
+        assertEquals(2L, result.get("totalDeliveries"));
+        assertEquals(1L, result.get("delivered"));
+        assertEquals(1L, result.get("inTransit"));
     }
 
     // Get All Deliveries

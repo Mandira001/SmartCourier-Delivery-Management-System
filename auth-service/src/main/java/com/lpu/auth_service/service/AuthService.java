@@ -10,7 +10,7 @@ import com.lpu.auth_service.dto.SignupRequest;
 import com.lpu.auth_service.entity.User;
 import com.lpu.auth_service.repository.UserRepository;
 import com.lpu.auth_service.security.JwtUtil;
-
+// This service class contains the business logic for handling user authentication, including signup and login.
 @Service
 public class AuthService {
 	
@@ -25,10 +25,11 @@ public class AuthService {
 	
 	@Autowired
 	private StringRedisTemplate redisTemplate;
-	
+	// This method handles the user signup process. 
+	// It checks if the user already exists, creates a new user with the provided details, and saves it to the database.
 	public String signup(SignupRequest request) {
 		
-		//checks is user exists
+		//checks if user exists
 		if(userRepo.findByEmail(request.getEmail()).isPresent()) {
 			return "User already exists";
 		}
@@ -56,15 +57,16 @@ public class AuthService {
 		
 		return "User registered successfully";
 	}
-	
+	// The login method authenticates the user by checking the email and password. 
+	// If authentication is successful, it generates a JWT token and stores it in Redis with an expiration time matching the JWT's expiry.
 	public String login(LoginRequest request) {
 		User user = userRepo.findByEmail(request.getEmail())
 				.orElseThrow(() -> new RuntimeException("User not found"));
-		
+		// CHECK PASSWORD
 		if(!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
 			throw new RuntimeException("Invalid password");
 		}
-		
+		// Generate JWT token
 		String token = jwtUtil.generateToken(user.getEmail(), user.getRole());
 
         // STORE TOKEN IN REDIS

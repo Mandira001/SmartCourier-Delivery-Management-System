@@ -1,7 +1,7 @@
 package com.lpu.tracking.service.dto;
 
 import com.lpu.tracking.service.entity.TrackingStatus;
-
+// DTO for tracking event request, containing tracking number, status, location, and remarks for updating the tracking information.
 public class TrackingEventRequest {
 	private String trackingNumber;
     private TrackingStatus status;

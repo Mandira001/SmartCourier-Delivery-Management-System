@@ -14,13 +14,21 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 
 import com.lpu.auth_service.security.SecurityConfig;
+import com.lpu.auth_service.security.JwtUtil;
 
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(AuthController.class)
+@WebMvcTest(
+        controllers = AuthController.class,
+        properties = {
+                "spring.cloud.config.enabled=false",
+                "spring.cloud.config.fail-fast=false",
+                "eureka.client.enabled=false"
+        }
+)
 @Import(SecurityConfig.class)
 class AuthControllerTest {
 
@@ -29,6 +37,9 @@ class AuthControllerTest {
 
     @MockBean
     private AuthService authService;
+
+    @MockBean
+    private JwtUtil jwtUtil;
 
     @Autowired
     private ObjectMapper objectMapper;

@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+// This is a JPA entity class that represents a tracking event in the system. 
+// It has fields for tracking number, status, location, remarks, and timestamp.
 public class TrackingEvent {
 
     @Id

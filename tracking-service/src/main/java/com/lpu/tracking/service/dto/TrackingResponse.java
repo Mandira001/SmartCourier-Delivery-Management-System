@@ -3,7 +3,7 @@ package com.lpu.tracking.service.dto;
 import java.time.LocalDateTime;
 
 import com.lpu.tracking.service.entity.TrackingStatus;
-
+// DTO for tracking response, containing status, location, remarks, and timestamp to provide tracking information to the client.
 public class TrackingResponse {
 	private TrackingStatus status;
     private String location;

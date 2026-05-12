@@ -14,6 +14,8 @@ import com.lpu.auth_service.security.JwtUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 class AuthServiceTest {
@@ -29,6 +31,12 @@ class AuthServiceTest {
 
     @Mock
     private JwtUtil jwtUtil;
+
+    @Mock
+    private StringRedisTemplate redisTemplate;
+
+    @Mock
+    private ValueOperations<String, String> valueOperations;
 
     @BeforeEach
     void setUp() {
@@ -114,9 +122,13 @@ class AuthServiceTest {
         when(jwtUtil.generateToken("test@mail.com", "USER"))
                 .thenReturn("token123");
 
+        when(redisTemplate.opsForValue())
+                .thenReturn(valueOperations);
+
         String result = authService.login(request);
 
         assertEquals("token123", result);
+        verify(valueOperations).set(eq("test@mail.com"), eq("token123"), any(java.time.Duration.class));
     }
 
     // Login Wrong Password

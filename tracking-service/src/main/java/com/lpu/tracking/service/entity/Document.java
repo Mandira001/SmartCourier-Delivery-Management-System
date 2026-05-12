@@ -3,7 +3,8 @@ package com.lpu.tracking.service.entity;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.*;
-
+// This is a JPA entity class that represents a document associated with a tracking number. 
+// It has fields for tracking number, file name, file type, file path, and upload timestamp.
 @Entity
 public class Document {
 

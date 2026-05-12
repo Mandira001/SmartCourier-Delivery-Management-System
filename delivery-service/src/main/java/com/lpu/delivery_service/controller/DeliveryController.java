@@ -16,6 +16,8 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/deliveries")
+// This class handles HTTP requests related to delivery operations. 
+// It uses the DeliveryService to perform business logic and is secured with role-based access control.
 public class DeliveryController {
 
     @Autowired

@@ -16,7 +16,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
+// Configuration class for security settings, enabling method-level security and configuring CORS and JWT authentication for the application.
 @Configuration
 @EnableMethodSecurity
 public class SecurityConfig {

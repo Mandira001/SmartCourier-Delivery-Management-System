@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
 @Entity
+// Address stores sender and receiver location details and uses validation for required fields.
 public class Address {
 
     @Id

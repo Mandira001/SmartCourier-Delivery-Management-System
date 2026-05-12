@@ -10,12 +10,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lpu.auth_service.dto.LoginRequest;
 import com.lpu.auth_service.dto.SignupRequest;
 import com.lpu.auth_service.service.AuthService;
-
+// This controller handles authentication-related endpoints such as signup and login. 
+// It uses the AuthService to perform the actual authentication logic.
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
 	
 	@Autowired
+	// injecting the AuthService to handle the business logic for authentication
 	private AuthService authService;
 	
 	@GetMapping("/test")

@@ -10,10 +10,15 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
-
+// JwtHeaderFilter is a custom filter that extends OncePerRequestFilter to ensure it runs once per request.
 public class JwtHeaderFilter extends OncePerRequestFilter {
 
     @Override
+    // doFilterInternal is the method that processes each incoming HTTP request. 
+    // It checks for the presence of custom headers (X-User-Email and X-User-Role) 
+    // that contain user information. If these headers are present, it creates an 
+    // authentication token with the user's email and role, and sets this authentication 
+    // in the SecurityContext, allowing downstream code to access the authenticated user's details.
     protected void doFilterInternal(HttpServletRequest request,
                                    HttpServletResponse response,
                                    FilterChain filterChain)

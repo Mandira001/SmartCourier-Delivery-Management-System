@@ -11,9 +11,15 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+// JwtHeaderFilter is a custom filter that extracts user information from HTTP headers 
+// and sets the authentication context for the request, allowing the application 
+// to identify the user and their role based on the provided headers.
 public class JwtHeaderFilter extends OncePerRequestFilter {
 
     @Override
+    // doFilterInternal checks for the presence of "X-User-Email" and "X-User-Role" headers in the incoming HTTP request.
+    // If both headers are present, it creates an authentication token with the user's email and role,
+    // and sets it in the SecurityContext, allowing the application to recognize the user for authorization purposes.
     protected void doFilterInternal(HttpServletRequest request,
                                    HttpServletResponse response,
                                    FilterChain filterChain)
